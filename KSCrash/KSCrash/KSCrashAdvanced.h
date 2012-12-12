@@ -98,5 +98,10 @@
  */
 //- (NSArray*) reportsDirectoryContents;
 
+/** Checks the crash state to see if the application crashed the last time it was executed.
+ *
+ * @return true if the last launch crashed.
+ */
+-(BOOL) didCrashOnLastRun;
 @end
 

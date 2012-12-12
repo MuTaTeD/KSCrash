@@ -495,6 +495,14 @@ failed:
     return YES;
 }
 
-
+-(BOOL) didCrashOnLastRun
+{
+	NSString * stateFilePath = [[self class] stateFilePath];
+	NSDictionary * stateInfo = [KSJSONCodec decode:[NSData dataWithContentsOfFile:stateFilePath] options:0 error:nil];
+	
+	BOOL didCrash = [[stateInfo objectForKey:@"crashedLastLaunch"] boolValue];
+	
+	return didCrash;
+}
 
 @end
