@@ -500,7 +500,9 @@ failed:
 	NSString * stateFilePath = [[self class] stateFilePath];
 	NSDictionary * stateInfo = [KSJSONCodec decode:[NSData dataWithContentsOfFile:stateFilePath] options:0 error:nil];
 	
-	BOOL didCrash = [[stateInfo objectForKey:@"crashedLastLaunch"] boolValue];
+	int runsAfterCrash = [[stateInfo objectForKey:@"launchesSinceLastCrash"] integerValue];
+	
+	BOOL didCrash = (runsAfterCrash == 1);
 	
 	return didCrash;
 }
