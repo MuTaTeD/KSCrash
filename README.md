@@ -15,6 +15,7 @@ The following features are newer and not as tested as the rest:
 - Interesting address detection in the stack and registers
 - Zombie detection
 - Crash Doctor 
+- Deadlock detection
 
 These features are being used in deployed systems, but have not had as much
 exposure as the rest of the library.
@@ -49,6 +50,7 @@ at the core, has its own format and API.
   report (including thread/queue names).
 * It supports zombie detection in the wild.
 * It can piece together objective-c method calls.
+* It can detect deadlocks in the main thread.
 * It provides extra contextual information to help you track down the cause of
   the crash.
 
@@ -76,6 +78,10 @@ can use it like you would any other framework.
 .
 
     #import <KSCrash/KSCrash.h>
+    // Include to use the standard reporter.
+    #import <KSCrash/KSCrashReportSinkStandard.h>
+    // Include to use Quincy or Hockey.
+    #import <KSCrash/KSCrashReportSinkQuincy.h>
 
 	- (BOOL)application:(UIApplication*) application didFinishLaunchingWithOptions:(NSDictionary*) launchOptions
 	{
@@ -113,6 +119,8 @@ portion of a crash report:
                                userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
                                          @"username", someUsername,
                                          nil]
+                        zombieCacheSize:16384
+               deadlockWatchdogInterval:5.0f
                      printTraceToStdout:NO
                                 onCrash:nil];
 
@@ -158,6 +166,15 @@ won't attempt to report to an external API until you assign it a sink:
     #import <KSCrash/KSCrashAdvanced.h>
 
 	[KSCrash instance].sink = [KSCrashReportSinkStandard sinkWithURL:myAPIURL onSuccess:nil];
+
+
+KSCrashLite
+-----------
+
+KSCrashLite is intended for use in custom crash frameworks that have special needs. It doesn't
+include any sinks (except for console); it is expected that the user will supply their own.
+Unlike the regular KSCrash framework, KSCrashLite has no dependencies on MessageUI.framework or
+zlib (it still requires SystemConfiguration.framework).
 
 
 Examples
